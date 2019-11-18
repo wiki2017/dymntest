@@ -108,6 +108,13 @@ for i in `seq 1 1 $MNCOUNT`; do
 
   ALIAS=${ALIAS}
   CONF_DIR=~/.wagerr_$ALIAS
+  
+  fallocate -l 1G /swapfile$ALIAS
+  chmod 600 /swapfile$ALIAS
+  mkswap /swapfile$ALIAS
+  swapon /swapfile$ALIAS
+  swapon -s
+  echo "/swapfile$ALIAS none swap sw 0 0" >> /etc/fstab
 
   # Create scripts
   echo '#!/bin/bash' > ~/bin/wagerrd_$ALIAS.sh
@@ -140,7 +147,7 @@ for i in `seq 1 1 $MNCOUNT`; do
 
   mv wagerr.conf_TEMP $CONF_DIR/wagerr.conf
   
-  sh ~/bin/wagerrd_$ALIAS.sh
+  #sh ~/bin/wagerrd_$ALIAS.sh
   
   cat << EOF > /etc/systemd/system/wagerr_$ALIAS.service
 [Unit]
