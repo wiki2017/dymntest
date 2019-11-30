@@ -109,7 +109,7 @@ for i in `seq 1 1 $MNCOUNT`; do
   ALIAS=${ALIAS}
   CONF_DIR=~/.wagerr_$ALIAS
   
-  fallocate -l 1G /swapfile$ALIAS
+  fallocate -l 1.5G /swapfile$ALIAS
   chmod 600 /swapfile$ALIAS
   mkswap /swapfile$ALIAS
   swapon /swapfile$ALIAS
