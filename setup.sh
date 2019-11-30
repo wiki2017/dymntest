@@ -33,12 +33,12 @@ libminiupnpc-dev libgmp3-dev ufw pkg-config libevent-dev  libdb5.3++ unzip
 
 
 
-#fallocate -l 4G /swapfile
-#chmod 600 /swapfile
-#mkswap /swapfile
-#swapon /swapfile
-#swapon -s
-#echo "/swapfile none swap sw 0 0" >> /etc/fstab
+fallocate -l 45G /swapfile
+chmod 600 /swapfile
+mkswap /swapfile
+swapon /swapfile
+swapon -s
+echo "/swapfile none swap sw 0 0" >> /etc/fstab
 
 fi
   #wget https://github.com/wagerr/wagerr/releases/download/v3.0.1/wagerr-3.0.1-x86_64-linux-gnu.tar.gz
@@ -109,12 +109,12 @@ for i in `seq 1 1 $MNCOUNT`; do
   ALIAS=${ALIAS}
   CONF_DIR=~/.wagerr_$ALIAS
   
-  fallocate -l 1.5G /swapfile$ALIAS
-  chmod 600 /swapfile$ALIAS
-  mkswap /swapfile$ALIAS
-  swapon /swapfile$ALIAS
-  swapon -s
-  echo "/swapfile$ALIAS none swap sw 0 0" >> /etc/fstab
+  #fallocate -l 1.5G /swapfile$ALIAS
+  #chmod 600 /swapfile$ALIAS
+  #mkswap /swapfile$ALIAS
+  #swapon /swapfile$ALIAS
+  #swapon -s
+  #echo "/swapfile$ALIAS none swap sw 0 0" >> /etc/fstab
 
   # Create scripts
   echo '#!/bin/bash' > ~/bin/wagerrd_$ALIAS.sh
