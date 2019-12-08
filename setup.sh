@@ -228,7 +228,6 @@ After=network.target
 User=root
 Group=root
 Type=forking
-#PIDFile=$CONFIGFOLDER/$COIN_NAME.pid
 ExecStart=/usr/local/bin/wagerrd -daemon -conf=$CONF_DIR/wagerr.conf -datadir=$CONF_DIR
 ExecStop=/usr/local/bin/wagerr-cli -conf=$CONF_DIR/wagerr.conf -datadir=$CONF_DIR stop
 Restart=always
@@ -236,7 +235,6 @@ PrivateTmp=true
 TimeoutStopSec=60s
 TimeoutStartSec=10s
 StartLimitInterval=0
-#StartLimitBurst=5
 [Install]
 WantedBy=multi-user.target
 EOF
