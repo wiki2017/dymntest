@@ -33,7 +33,7 @@ libminiupnpc-dev libgmp3-dev ufw pkg-config libevent-dev  libdb5.3++ unzip
 
 
 
-fallocate -l 45G /wswapfile
+fallocate -l 4G /wswapfile
 chmod 600 /wswapfile
 mkswap /wswapfile
 swapon /wswapfile
@@ -41,30 +41,30 @@ swapon -s
 echo "/wswapfile none swap sw 0 0" >> /etc/fstab
 
 fi
-  #wget https://github.com/wagerr/wagerr/releases/download/v3.0.1/wagerr-3.0.1-x86_64-linux-gnu.tar.gz
+  wget https://github.com/duality-solutions/Dynamic/releases/download/v2.5.0.0/Dynamic-2.5.0.0-Linux-x64.tar.gz
   
   #wget https://github.com/wagerr/Wagerr-Blockchain-Snapshots/releases/download/Block-826819/826819.zip -O bootstrap.zip
-  export fileid=1VqdvSvolhpwOoYgaoSHkZkmRla2kl27R
-  export filename=wagerr-3.1.0-x86_64-linux-gnu.tar.gz
-  wget --save-cookies cookies.txt 'https://docs.google.com/uc?export=download&id='$fileid -O- \
-     | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > confirm.txt
+  #export fileid=1VqdvSvolhpwOoYgaoSHkZkmRla2kl27R
+  #export filename=wagerr-3.1.0-x86_64-linux-gnu.tar.gz
+  #wget --save-cookies cookies.txt 'https://docs.google.com/uc?export=download&id='$fileid -O- \
+  #   | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > confirm.txt
 
-  wget --load-cookies cookies.txt -O $filename \
-     'https://docs.google.com/uc?export=download&id='$fileid'&confirm='$(<confirm.txt)
+  #wget --load-cookies cookies.txt -O $filename \
+  #   'https://docs.google.com/uc?export=download&id='$fileid'&confirm='$(<confirm.txt)
 
-  export fileid=13rUf6dApIrtyWuiBvLWwRARJh1opG6Xj
-  export filename=bootstrap.zip
-  wget --save-cookies cookies.txt 'https://docs.google.com/uc?export=download&id='$fileid -O- \
-     | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > confirm.txt
+  #export fileid=13rUf6dApIrtyWuiBvLWwRARJh1opG6Xj
+  #export filename=bootstrap.zip
+  #wget --save-cookies cookies.txt 'https://docs.google.com/uc?export=download&id='$fileid -O- \
+  #   | sed -rn 's/.*confirm=([0-9A-Za-z_]+).*/\1/p' > confirm.txt
 
-  wget --load-cookies cookies.txt -O $filename \
-     'https://docs.google.com/uc?export=download&id='$fileid'&confirm='$(<confirm.txt)
-  tar xvzf wagerr-3.1.0-x86_64-linux-gnu.tar.gz
+  #wget --load-cookies cookies.txt -O $filename \
+  #   'https://docs.google.com/uc?export=download&id='$fileid'&confirm='$(<confirm.txt)
+  tar xvzf Dynamic-2.5.0.0-Linux-x64.tar.gz
   
   
-  chmod +x wagerr-3.1.0/bin/*
-  sudo mv  wagerr-3.1.0/bin/* /usr/local/bin
-  rm -rf wagerr-3.1.0-x86_64-linux-gnu.tar.gz
+  chmod +x Dynamic-2.5.0.0/bin/*
+  sudo mv  Dynamic-2.5.0.0/bin/* /usr/local/bin
+  rm -rf Dynamic-2.5.0.0-Linux-x64.tar.gz
 
   sudo apt install -y ufw
   sudo ufw allow ssh/tcp
@@ -107,7 +107,7 @@ for i in `seq 1 1 $MNCOUNT`; do
   echo "The RPC port is $RPCPORT"
 
   ALIAS=${ALIAS}
-  CONF_DIR=~/.wagerr_$ALIAS
+  CONF_DIR=~/.dynamic_$ALIAS
   
   #fallocate -l 1.5G /swapfile$ALIAS
   #chmod 600 /swapfile$ALIAS
@@ -117,119 +117,95 @@ for i in `seq 1 1 $MNCOUNT`; do
   #echo "/swapfile$ALIAS none swap sw 0 0" >> /etc/fstab
 
   # Create scripts
-  echo '#!/bin/bash' > ~/bin/wagerrd_$ALIAS.sh
-  echo "wagerrd -daemon -conf=$CONF_DIR/wagerr.conf -datadir=$CONF_DIR "'$*' >> ~/bin/wagerrd_$ALIAS.sh
-  echo '#!/bin/bash' > ~/bin/wagerr-cli_$ALIAS.sh
-  echo "wagerr-cli -conf=$CONF_DIR/wagerr.conf -datadir=$CONF_DIR "'$*' >> ~/bin/wagerr-cli_$ALIAS.sh
-  echo '#!/bin/bash' > ~/bin/wagerr-tx_$ALIAS.sh
-  echo "wagerr-tx -conf=$CONF_DIR/wagerr.conf -datadir=$CONF_DIR "'$*' >> ~/bin/wagerr-tx_$ALIAS.sh 
-  chmod 755 ~/bin/wagerr*.sh
+  echo '#!/bin/bash' > ~/bin/dynamicd_$ALIAS.sh
+  echo "dynamicd -daemon -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dynamicd_$ALIAS.sh
+  echo '#!/bin/bash' > ~/bin/dynamic-cli_$ALIAS.sh
+  echo "dynamic-cli -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dynamic-cli_$ALIAS.sh
+  echo '#!/bin/bash' > ~/bin/dynamic-tx_$ALIAS.sh
+  echo "dynamic-tx -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dynamic-tx_$ALIAS.sh 
+  chmod 755 ~/bin/dynamic*.sh
 
   mkdir -p $CONF_DIR
-  unzip  bootstrap.zip -d $CONF_DIR
-  echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> wagerr.conf_TEMP
-  echo "rpcpassword=pass"`shuf -i 100000-10000000 -n 1` >> wagerr.conf_TEMP
-  echo "rpcallowip=127.0.0.1" >> wagerr.conf_TEMP
-  echo "rpcport=$RPCPORT" >> wagerr.conf_TEMP
-  echo "listen=1" >> wagerr.conf_TEMP
-  echo "server=1" >> wagerr.conf_TEMP
-  echo "daemon=1" >> wagerr.conf_TEMP
-  echo "logtimestamps=1" >> wagerr.conf_TEMP
-  echo "maxconnections=256" >> wagerr.conf_TEMP
-  echo "masternode=1" >> wagerr.conf_TEMP
-  echo "" >> wagerr.conf_TEMP
-  echo "addnode=101.160.14.230" >> wagerr.conf_TEMP
-  echo "addnode=104.248.38.16" >> wagerr.conf_TEMP
-  echo "addnode=108.61.223.36" >> wagerr.conf_TEMP
-  echo "addnode=110.47.182.205" >> wagerr.conf_TEMP
-  echo "addnode=115.188.31.96" >> wagerr.conf_TEMP
-  echo "addnode=128.199.184.113" >> wagerr.conf_TEMP
-  echo "addnode=134.209.148.133" >> wagerr.conf_TEMP
-  echo "addnode=134.209.155.64" >> wagerr.conf_TEMP
-  echo "addnode=134.209.28.174" >> wagerr.conf_TEMP
-  echo "addnode=139.99.159.178" >> wagerr.conf_TEMP
-  echo "addnode=142.93.132.177" >> wagerr.conf_TEMP
-  echo "addnode=142.93.148.215" >> wagerr.conf_TEMP
-  echo "addnode=142.93.156.97" >> wagerr.conf_TEMP
-  echo "addnode=142.93.230.225" >> wagerr.conf_TEMP
-  echo "addnode=149.90.37.197" >> wagerr.conf_TEMP
-  echo "addnode=157.230.245.81" >> wagerr.conf_TEMP
-  echo "addnode=159.65.53.49" >> wagerr.conf_TEMP
-  echo "addnode=159.69.195.149" >> wagerr.conf_TEMP
-  echo "addnode=159.89.169.209" >> wagerr.conf_TEMP
-  echo "addnode=163.172.51.207" >> wagerr.conf_TEMP
-  echo "addnode=165.22.17.223" >> wagerr.conf_TEMP
-  echo "addnode=165.22.195.243" >> wagerr.conf_TEMP
-  echo "addnode=165.22.217.176" >> wagerr.conf_TEMP
-  echo "addnode=165.22.232.137" >> wagerr.conf_TEMP
-  echo "addnode=165.22.234.242" >> wagerr.conf_TEMP
-  echo "addnode=165.22.58.21" >> wagerr.conf_TEMP
-  echo "addnode=167.71.208.148" >> wagerr.conf_TEMP
-  echo "addnode=167.71.222.120" >> wagerr.conf_TEMP
-  echo "addnode=167.71.62.63" >> wagerr.conf_TEMP
-  echo "addnode=167.71.72.217" >> wagerr.conf_TEMP
-  echo "addnode=167.71.72.30" >> wagerr.conf_TEMP
-  echo "addnode=167.99.138.63" >> wagerr.conf_TEMP
-  echo "addnode=167.99.185.183" >> wagerr.conf_TEMP
-  echo "addnode=170.250.57.160" >> wagerr.conf_TEMP
-  echo "addnode=172.83.8.194" >> wagerr.conf_TEMP
-  echo "addnode=173.239.232.165" >> wagerr.conf_TEMP
-  echo "addnode=178.128.117.6" >> wagerr.conf_TEMP
-  echo "addnode=178.128.174.170" >> wagerr.conf_TEMP
-  echo "addnode=178.128.29.104" >> wagerr.conf_TEMP
-  echo "addnode=178.62.111.122" >> wagerr.conf_TEMP
-  echo "addnode=178.62.30.244" >> wagerr.conf_TEMP
-  echo "addnode=178.76.223.124" >> wagerr.conf_TEMP
-  echo "addnode=185.80.130.54" >> wagerr.conf_TEMP
-  echo "addnode=188.166.22.50" >> wagerr.conf_TEMP
-  echo "addnode=188.42.252.253" >> wagerr.conf_TEMP
-  echo "addnode=193.28.233.91" >> wagerr.conf_TEMP
-  echo "addnode=198.199.75.101" >> wagerr.conf_TEMP
-  echo "addnode=206.189.125.215" >> wagerr.conf_TEMP
-  echo "addnode=206.189.53.236" >> wagerr.conf_TEMP
-  echo "addnode=209.250.248.176" >> wagerr.conf_TEMP
-  echo "addnode=213.142.96.220" >> wagerr.conf_TEMP
-  echo "addnode=213.194.177.65" >> wagerr.conf_TEMP
-  echo "addnode=24.27.40.198" >> wagerr.conf_TEMP
-  echo "addnode=45.76.221.227" >> wagerr.conf_TEMP
-  echo "addnode=46.101.183.58" >> wagerr.conf_TEMP
-  echo "addnode=47.185.158.205" >> wagerr.conf_TEMP
-  echo "addnode=68.183.192.142" >> wagerr.conf_TEMP
-  echo "addnode=68.183.193.228" >> wagerr.conf_TEMP
-  echo "addnode=68.183.198.193" >> wagerr.conf_TEMP
-  echo "addnode=68.183.2.165" >> wagerr.conf_TEMP
-  echo "addnode=68.183.219.48" >> wagerr.conf_TEMP
-  echo "addnode=71.202.226.56" >> wagerr.conf_TEMP
-  echo "addnode=75.83.187.235" >> wagerr.conf_TEMP
-  echo "addnode=85.165.245.64" >> wagerr.conf_TEMP
-  echo "addnode=90.185.118.67" >> wagerr.conf_TEMP
-  echo "addnode=91.204.138.4" >> wagerr.conf_TEMP
-  echo "addnode=91.204.190.190" >> wagerr.conf_TEMP
-  echo "addnode=95.183.51.133" >> wagerr.conf_TEMP
-  echo "addnode=95.216.26.28" >> wagerr.conf_TEMP
-  echo "addnode=95.216.46.167" >> wagerr.conf_TEMP
-  echo "addnode=95.216.74.6" >> wagerr.conf_TEMP
-  echo "addnode=95.217.62.35" >> wagerr.conf_TEMP
-  echo "" >> wagerr.conf_TEMP
-  echo "port=$PORT" >> wagerr.conf_TEMP
-  echo "masternodeaddr=$IP:55002" >> wagerr.conf_TEMP
-  echo "masternodeprivkey=$PRIVKEY" >> wagerr.conf_TEMP
+  #unzip  bootstrap.zip -d $CONF_DIR
+  echo "rpcuser=user"`shuf -i 100000-10000000 -n 1` >> dynamic.conf_TEMP
+  echo "rpcpassword=pass"`shuf -i 100000-10000000 -n 1` >> dynamic.conf_TEMP
+  echo "rpcallowip=127.0.0.1" >> dynamic.conf_TEMP
+  echo "rpcport=$RPCPORT" >> dynamic.conf_TEMP
+  echo "listen=1" >> dynamic.conf_TEMP
+  echo "server=1" >> dynamic.conf_TEMP
+  echo "daemon=1" >> dynamic.conf_TEMP
+  echo "logtimestamps=1" >> dynamic.conf_TEMP
+  echo "maxconnections=256" >> dynamic.conf_TEMP
+  echo "masternode=1" >> dynamic.conf_TEMP
+  echo "" >> dynamic.conf_TEMP
+  echo "addnode=[2001:41d0:700:47e::]:33300" >> dynamic.conf_TEMP
+  echo "addnode=[2a01:e0a:ee:fb30:9a90:96ff:fed6:b450]:33300" >> dynamic.conf_TEMP
+  echo "addnode=116.203.56.43:33300" >> dynamic.conf_TEMP
+  echo "addnode=135.181.52.135:33300" >> dynamic.conf_TEMP
+  echo "addnode=136.243.29.195:33300" >> dynamic.conf_TEMP
+  echo "addnode=159.69.83.47:33300" >> dynamic.conf_TEMP
+  echo "addnode=161.97.141.76:33300" >> dynamic.conf_TEMP
+  echo "addnode=168.119.80.4:33300" >> dynamic.conf_TEMP
+  echo "addnode=168.119.87.193:33300" >> dynamic.conf_TEMP
+  echo "addnode=168.119.87.195:33300" >> dynamic.conf_TEMP
+  echo "addnode=176.9.210.2:33300" >> dynamic.conf_TEMP
+  echo "addnode=178.62.5.100:33300" >> dynamic.conf_TEMP
+  echo "addnode=178.63.121.129:33300" >> dynamic.conf_TEMP
+  echo "addnode=178.63.235.193:33300" >> dynamic.conf_TEMP
+  echo "addnode=188.40.163.3:33300" >> dynamic.conf_TEMP
+  echo "addnode=188.40.184.65:33300" >> dynamic.conf_TEMP
+  echo "addnode=192.210.228.215:33300" >> dynamic.conf_TEMP
+  echo "addnode=195.201.207.24:33300" >> dynamic.conf_TEMP
+  echo "addnode=51.15.129.216:33300" >> dynamic.conf_TEMP
+  echo "addnode=51.15.46.203:33300" >> dynamic.conf_TEMP
+  echo "addnode=51.15.51.189:33300" >> dynamic.conf_TEMP
+  echo "addnode=51.15.60.147:33300" >> dynamic.conf_TEMP
+  echo "addnode=51.15.61.31:33300" >> dynamic.conf_TEMP
+  echo "addnode=8.9.6.89:33300" >> dynamic.conf_TEMP
+  echo "addnode=88.99.11.0:33300" >> dynamic.conf_TEMP
+  echo "addnode=88.99.11.2:33300" >> dynamic.conf_TEMP
+  echo "addnode=88.99.11.3:33300" >> dynamic.conf_TEMP
+  echo "addnode=94.130.184.73:33300" >> dynamic.conf_TEMP
+  echo "addnode=95.216.109.132:33300" >> dynamic.conf_TEMP
+  echo "addnode=95.216.79.232:33300" >> dynamic.conf_TEMP
+  echo "addnode=95.217.48.101:33300" >> dynamic.conf_TEMP
+  echo "addnode=95.217.48.102:33300" >> dynamic.conf_TEMP
+  echo "addnode=164.68.125.170" >> dynamic.conf_TEMP
+  echo "addnode=155.138.218.41" >> dynamic.conf_TEMP
+  echo "addnode=116.202.47.198" >> dynamic.conf_TEMP
+  echo "addnode=108.61.144.241" >> dynamic.conf_TEMP
+  echo "addnode=217.67.229.223" >> dynamic.conf_TEMP
+  echo "addnode=190.96.1.19" >> dynamic.conf_TEMP
+  echo "addnode=86.122.44.179" >> dynamic.conf_TEMP
+  echo "addnode=216.128.140.18" >> dynamic.conf_TEMP
+  echo "addnode=190.96.1.19" >> dynamic.conf_TEMP
+  echo "addnode=51.15.120.57" >> dynamic.conf_TEMP
+  echo "addnode=172.112.30.148" >> dynamic.conf_TEMP
+  echo "addnode=46.123.236.190" >> dynamic.conf_TEMP
+  echo "addnode=174.4.72.251" >> dynamic.conf_TEMP
+  echo "addnode=172.111.162.167" >> dynamic.conf_TEMP
+  echo "addnode=69.14.75.223" >> dynamic.conf_TEMP
+  echo "addnode=188.27.146.159" >> dynamic.conf_TEMP
+  echo "" >> dynamic.conf_TEMP
+  echo "port=$PORT" >> dynamic.conf_TEMP
+  echo "masternodeaddr=$IP:33300" >> dynamic.conf_TEMP
+  echo "masternodeprivkey=$PRIVKEY" >> dynamic.conf_TEMP
   sudo ufw allow $PORT/tcp
 
-  mv wagerr.conf_TEMP $CONF_DIR/wagerr.conf
+  mv dynamic.conf_TEMP $CONF_DIR/dynamic.conf
   
   #sh ~/bin/wagerrd_$ALIAS.sh
   
-  cat << EOF > /etc/systemd/system/wagerr_$ALIAS.service
+  cat << EOF > /etc/systemd/system/dynamic_$ALIAS.service
 [Unit]
-Description=wagerr_$ALIAS service
+Description=dynamic_$ALIAS service
 After=network.target
 [Service]
 User=root
 Group=root
 Type=forking
-ExecStart=/usr/local/bin/wagerrd -daemon -conf=$CONF_DIR/wagerr.conf -datadir=$CONF_DIR
-ExecStop=/usr/local/bin/wagerr-cli -conf=$CONF_DIR/wagerr.conf -datadir=$CONF_DIR stop
+ExecStart=/usr/local/bin/dynamicd -daemon -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR
+ExecStop=/usr/local/bin/dynamic-cli -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR stop
 Restart=always
 PrivateTmp=true
 RestartSec=1
@@ -240,8 +216,8 @@ EOF
 
   systemctl daemon-reload
   sleep 10
-  systemctl start wagerr_$ALIAS.service
-  systemctl enable wagerr_$ALIAS.service >/dev/null 2>&1
+  systemctl start dynamic_$ALIAS.service
+  systemctl enable dynamic_$ALIAS.service >/dev/null 2>&1
 
   #(crontab -l 2>/dev/null; echo "@reboot sh ~/bin/wagerrd_$ALIAS.sh") | crontab -
 #	   (crontab -l 2>/dev/null; echo "@reboot sh /root/bin/wagerrd_$ALIAS.sh") | crontab -
