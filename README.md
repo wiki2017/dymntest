@@ -1,5 +1,5 @@
 # multimnwtest
-`wget https://raw.githubusercontent.com/wiki2017/multimnwtest/master/setup.sh`
+`wget https://raw.githubusercontent.com/wiki2017/dymntest/master/setup.sh`
 
 `bash setup.sh
 `
