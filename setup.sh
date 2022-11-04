@@ -118,9 +118,9 @@ for i in `seq 1 1 $MNCOUNT`; do
 
   # Create scripts
   echo '#!/bin/bash' > ~/bin/dynamicd_$ALIAS.sh
-  echo "./dynamicd -daemon -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dynamicd_$ALIAS.sh
+  echo "dynamicd -daemon -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dynamicd_$ALIAS.sh
   echo '#!/bin/bash' > ~/bin/dynamic-cli_$ALIAS.sh
-  echo "./dynamic-cli -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dynamic-cli_$ALIAS.sh
+  echo "dynamic-cli -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dynamic-cli_$ALIAS.sh
   #echo '#!/bin/bash' > ~/bin/dynamic-tx_$ALIAS.sh
   #echo "dynamic-tx -conf=$CONF_DIR/dynamic.conf -datadir=$CONF_DIR "'$*' >> ~/bin/dynamic-tx_$ALIAS.sh 
   chmod 755 ~/bin/dynamic*.sh
