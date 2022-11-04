@@ -62,8 +62,8 @@ fi
   tar xvzf Dynamic-2.5.0.0-Linux-x64.tar.gz
   
   
-  chmod +x Dynamic-2.5.0.0/bin/*
-  sudo mv  Dynamic-2.5.0.0/bin/* /usr/local/bin
+  chmod +x ~/bin/*
+  sudo mv  ~/bin/* /usr/local/bin
   rm -rf Dynamic-2.5.0.0-Linux-x64.tar.gz
 
   sudo apt install -y ufw
